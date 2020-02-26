@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         $cnn = new myconnection();
         //definir la consulta
         $sql = printf("select name,email,firstname from users where name=%s'and
-        password=%s'", $username,$userpassword);
+        password=%s'and password= sha'"$username,$userpassword);
         //ejecutar la consulta 
         $rst =$cnn->query($sql);
         //cerrar la conexion
@@ -20,9 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         //evaluar el resultado
         if (!$rst){
             // TODO: manejar el error de la ejecusion de la consulta
-        }else {
+            echo json_encode(['error'=> 'error al ejecutar la consulta'])
+        }elseif ($rst->num_rows == 1 {
             // TODO: manejar la respuesta de la base de datos
             // para preparar lo que se enviara al frontend
+            // La respuesta esperada aqui es un objeto de tipo mysqli_result
+            $usuario = $rst ->fetch_assoc();
+            echo json_encode(['data' => $usuario]);
+        }else {
+            echo json_encode(['respuesta' => 'usuario incorrecto.'])
         }
     }
     echo json_encode(['usuario' => $username, 'contraseña' => $userpassword]);    
